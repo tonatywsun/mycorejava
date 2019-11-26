@@ -23,9 +23,11 @@ public class ExecutorsTest {
     /**
      * newCachedThreadPool创建一个可缓存线程池，如果线程池长度超过处理需要，可灵活回收空闲线程，若无可复用，则新建线程。
      * 线程池为0x7fffffff，当执行第二个任务时第一个任务已经完成，会复用执行第一个任务的线程，而不用每次新建线程，线程空闲时间为60s就会被回收
+     * 无界限队列
      */
     @Test
     public void test1() {
+        //使用了SynchronousQueue，这个暂时不了解
         ExecutorService cachedThreadPool = Executors.newCachedThreadPool();
         for (int i = 0; i < 100; i++) {
             cachedThreadPool.execute(() -> System.out.println(Thread.currentThread()));
@@ -34,6 +36,7 @@ public class ExecutorsTest {
 
     /**
      * newFixedThreadPool 创建一个定长线程池，可控制线程最大并发数，超出的线程会在队列中等待。
+     * 核心线程数==最大线程数 无界队列 keepalivetime==0
      */
     @Test
     public void test2() {

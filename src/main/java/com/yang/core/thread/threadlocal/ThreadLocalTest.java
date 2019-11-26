@@ -6,7 +6,7 @@ import java.text.SimpleDateFormat;
  * @Description: SimpleDateFormat的tosting打印的后面数字是hashcode，SimpleDateFormat的hashCode是pattern的hashcode,
  * 如果两个对象pattern一样则hashcode一样则tostring一样但是两个对象不是同一个对象
  * <p>
- * 每个thread都有一个ThreadLocal.ThreadLocalMap，ThreadLocalMap是模式修饰的，只有本包可以访问，外面无法访问，map中有一个private Entry[] table，
+ * 每个thread都有一个ThreadLocal.ThreadLocalMap，ThreadLocalMap是默认修饰符修饰的，只有本包可以访问，外面无法访问，map中有一个private Entry[] table，
  * 第key.threadLocalHashCode & (len-1)位置存放着key和value
  * @Author: tona.sun
  * @Date: 2019/11/21 11:37

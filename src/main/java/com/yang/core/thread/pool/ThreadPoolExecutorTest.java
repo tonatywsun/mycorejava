@@ -22,7 +22,7 @@ public class ThreadPoolExecutorTest {
          *keepAliveTime:当线程池中创建的线程超过了核心线程数的时候，这些多余的空闲线程在结束之前等待新的任务最大的存活时间
          *unit:keepAliveTime的时间单位，可以是纳秒，微秒，毫秒，秒，分钟，小时，天
          *workQueue:存放任务的队列，只有当线程数>核心线程数，才会把其他的任务放入queue,当queue放满之后再往其中塞任务会新建线程去执行这些无法塞入的任务，
-         *          新建线程数加核心线程数达到最大线程数时,此时队列满了无法塞入，线程数已达最大无法创建，最执行拒绝策略（具体的实现）
+         *          新建线程数加核心线程数达到最大线程数时,此时队列满了无法塞入，线程数已达最大无法创建，最后执行拒绝策略（具体的实现）
          */
         ThreadPoolExecutor threadPoolExecutor =
                 new ThreadPoolExecutor(2, 4, 2000, TimeUnit.MILLISECONDS, blockingQueue);
@@ -43,7 +43,8 @@ public class ThreadPoolExecutorTest {
         threadPoolExecutor.execute(new MyRunnable("7"));
         //已达到最大线程数，再执行会报错（如果没报错是因为有线程已经执行完毕了，所以可以执行此任务）
         //threadPoolExecutor.execute(new MyRunnable("8"));
-        //上代码会创建两个核心线程和两个多余线程，休息1s，此时所有的任务都执行完毕了，
+
+        //上面的代码会创建两个核心线程和两个多余线程，此处sleep 1s，此时所有的任务都执行完毕了，
         //但是多余线程还存活着，此时再执行任务，任务会先放到队列中，然后所有线程从队列中取任务去执行
         //如果塞得任务数超过了队列的容量，就会报错
         //Thread.sleep(1000);
