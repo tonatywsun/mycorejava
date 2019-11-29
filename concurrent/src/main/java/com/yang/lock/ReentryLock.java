@@ -225,7 +225,7 @@ class ReentrantLockThread extends Thread {
          *        //从后往前取一个p.waitStatus <= 0&&p != node && p != null的node
          *        for (Node p = tail; p != node && p != null; p = p.prev)
          *            if (p.waitStatus <= 0)
-         *            s = p;
+         *                s = p;
          *    }
          *    if (s != null)
          *        //唤醒这个node中的thread

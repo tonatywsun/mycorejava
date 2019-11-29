@@ -8,7 +8,8 @@
 
 	<modules>
 		<module>concurrent</module>
-	</modules>
+        <module>designmode</module>
+    </modules>
 	<!-- 项目属性 -->
 	<properties>
 		<!-- jar 版本设置 -->
