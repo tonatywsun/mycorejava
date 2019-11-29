@@ -3,7 +3,7 @@ package com.yang.singleton;
 /**
  * 饿汉式
  *
- * @author yangyang
+ * @author tona.sun
  * @date 2019/8/24 13:40
  */
 public class Hungry {

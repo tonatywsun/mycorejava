@@ -8,7 +8,7 @@ import java.lang.reflect.Method;
 /**
  * cglib动态代理
  * 被代理类不需要实现接口
- * @author yangyang
+ * @author tona.sun
  * @date 2019/8/17 19:35
  */
 public class CglibMethodInterceptor implements MethodInterceptor {

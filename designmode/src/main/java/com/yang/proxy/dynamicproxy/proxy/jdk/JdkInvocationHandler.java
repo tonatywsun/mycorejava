@@ -7,7 +7,7 @@ import java.lang.reflect.Proxy;
 /**
  * JDK动态代理
  * 被代理类必须实现接口
- * @author yangyang
+ * @author tona.sun
  * @date 2019/8/17 17:11
  */
 public class JdkInvocationHandler implements InvocationHandler {

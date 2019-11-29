@@ -3,7 +3,7 @@ package com.yang.proxy.staticproxy.proxy;
 import com.yang.proxy.service.OrderService;
 
 /**
- * @author yangyang
+ * @author tona.sun
  * @date 2019/8/17 16:59
  */
 public class OrderServiceProxy implements OrderService {

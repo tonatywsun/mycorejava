@@ -1,7 +1,7 @@
 package com.yang.singleton;
 
 /**
- * @author yangyang
+ * @author tona.sun
  * @date 2019/8/24 14:46
  */
 public class StaticCodeLump {

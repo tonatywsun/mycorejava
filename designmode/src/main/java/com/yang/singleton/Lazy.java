@@ -3,7 +3,7 @@ package com.yang.singleton;
 /**
  * 懒汉式
  *
- * @author yangyang
+ * @author tona.sun
  * @date 2019/8/24 14:24
  */
 public class Lazy {
