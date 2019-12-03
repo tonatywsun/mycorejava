@@ -1,0 +1,3 @@
+JAVA_HOME(D:\Java\jdk-11.0.4)\bin\jconsole.exe工具可以查看线程状态
+cmd->jstack pid (e: jstack 12592)命令行查看线程状态
+cmd->javap -v classname(D:\JetBrains\IntelliJ IDEA 2019.2.3\myworkspace\mycorejava\concurrent\target\classes\com\yang\lock>javap -v ReentryLock) 反编译

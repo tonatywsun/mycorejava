@@ -6,5 +6,8 @@ package com.yang.jol;
  * @Date: 2019/11/29 10:37
  */
 public class Entry {
-    char c;
+   /* char c;
+    Character ch;
+    Character ch2;
+    Character ch3;*/
 }
