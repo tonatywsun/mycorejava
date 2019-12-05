@@ -36,7 +36,7 @@ public class AtomicIntegerTest extends Thread {
     }
 
     public static void main(String[] args) throws InterruptedException {
-        for (int i = 0; i < 100; i++) {
+        /*for (int i = 0; i < 100; i++) {
             new AtomicIntegerTest().start();
         }
         //等待子线程执行完毕
@@ -44,6 +44,9 @@ public class AtomicIntegerTest extends Thread {
         //无法达到预期值
         //System.out.println(k);
         //预期值
-        System.out.println(atomicInteger.get());
+        System.out.println(atomicInteger.get());*/
+
+
+        System.out.println(atomicInteger.incrementAndGet());
     }
 }
