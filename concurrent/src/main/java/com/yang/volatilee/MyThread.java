@@ -23,6 +23,7 @@ public class MyThread extends Thread {
         long c = 0;
         System.out.println("进入run了");
         // 线程可以把变量保存本地内存（比如机器的寄存器）中，而不是直接在主存中进行读写。这就可能造成一个线程在主存中修改了一个变量的值，而另外一个线程还继续使用它在寄存器中的变量值的拷贝，造成数据的不一致。
+        // 引用类型修改的属性先保存在工作内存，然后刷新到堆内存
         // isRunning变量没有加上volatile关键字时，运行以上代码会出现死循环，这是因为isRunning变量虽然被修改但是没有被写到主存中，这也就导致该线程在本地内存中的值一直为true，这样就导致了死循环的产生。
         while (isRunning == true) {
             //volatile关键字能保证数据的可见性，但不能保证数据的原子性。synchronized关键字两者都能保证。
