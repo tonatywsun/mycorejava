@@ -13,6 +13,53 @@ import java.util.concurrent.TimeUnit;
  * @Date: 2019/11/25 10:02
  */
 public class ThreadPoolExecutorTest {
+    private static final int COUNT_BITS = Integer.SIZE - 3;
+    //前三位状态位的值
+    private static final int RUNNING = -1 << COUNT_BITS;//111
+    private static final int SHUTDOWN = 0 << COUNT_BITS;//000
+    private static final int STOP = 1 << COUNT_BITS;//001
+    private static final int TIDYING = 2 << COUNT_BITS;//010
+    private static final int TERMINATED = 3 << COUNT_BITS;//011
+    private static final int COUNT_MASK = (1 << COUNT_BITS) - 1;
+
+    public static void main(String[] args) {
+        System.out.println("RUNNING" + Integer.toBinaryString(RUNNING));
+        System.out.println("SHUTDOWN" + Integer.toBinaryString(SHUTDOWN));
+        System.out.println("STOP" + Integer.toBinaryString(STOP));
+        System.out.println("TIDYING" + Integer.toBinaryString(TIDYING));
+        System.out.println("TERMINATED" + Integer.toBinaryString(TERMINATED));
+        System.out.println("COUNT_MASK" + Integer.toBinaryString(COUNT_MASK));
+    }
+
+    /*execute源码解析
+      public void execute(Runnable command) {
+        if (command == null)
+            throw new NullPointerException();
+        // ctl初始数值为 （-1 << 29 |0）->11100000000000000000000000000000，其中前三位表示线程池状态，后29位数表示线程池中线程数量
+        int c = ctl.get();
+        //workerCountOf(c),(-1 << 29 | 0) & ((1 << 29) - 1)取后29程池中线程数量
+        if (workerCountOf(c) < corePoolSize) {
+            if (addWorker(command, true))
+                return;
+            c = ctl.get();
+        }
+        //c<0,只有RUNNING状态前三位是111为负值才会小于0，然后放到队列
+        if (isRunning(c) && workQueue.offer(command)) {
+            int recheck = ctl.get();
+            //再次检验
+            if (! isRunning(recheck) && remove(command))
+                reject(command);
+                //如果运行线程数为0，新增一个工作线程
+            else if (workerCountOf(recheck) == 0)
+                addWorker(null, false);
+        }
+        //最后当队列满了。直接新增工作线程，失败就执行拒绝策略
+        else if (!addWorker(command, false))
+            reject(command);
+        }
+    */
+
+
     @Test
     public void test() throws Exception {
         BlockingQueue<Runnable> blockingQueue = new LinkedBlockingQueue<>(3);
@@ -59,6 +106,16 @@ public class ThreadPoolExecutorTest {
 
 
         Thread.sleep(5000);
+
+        //关闭线程池，不再接受新任务，但要等队列里面的执行完毕之后才会真正关闭
+        threadPoolExecutor.isShutdown();
+        //关闭线程池，不再接受新任务，队列里面任务不再执行，但是线程正在执行的任务要执行完毕之后才会真正关闭
+        threadPoolExecutor.shutdownNow();
+        //是否正在终止
+        threadPoolExecutor.isTerminating();
+        //线程池是否终止
+        while (threadPoolExecutor.isTerminated()) {
+        }
     }
 }
 

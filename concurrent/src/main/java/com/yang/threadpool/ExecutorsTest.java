@@ -7,7 +7,9 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.FutureTask;
+import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -136,5 +138,23 @@ public class ExecutorsTest {
         t.start(); // 启动线程
         System.out.println(task.get());
         //task.cancel(true); // 取消线程
+    }
+
+    @Test
+    public void test7() {
+        //使用了SynchronousQueue，这个暂时不了解
+        ExecutorService cachedThreadPool = new ThreadPoolExecutor(3, 5, 10L, TimeUnit.SECONDS, new LinkedBlockingQueue<>(666));
+        for (int i = 0; i < 100; i++) {
+            cachedThreadPool.execute(() -> {
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                System.out.println(Thread.currentThread());
+            });
+        }
+        //关闭线程池，不再接受新任务，但要等队列里面的执行完毕之后才会真正关闭
+        cachedThreadPool.isShutdown();
     }
 }
