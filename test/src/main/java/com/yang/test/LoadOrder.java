@@ -82,6 +82,8 @@ class E extends A {
 
     {
         System.out.println("E{}");
+        System.out.println(this);
+        setS("aaa");
     }
 
     D d = new D();
@@ -90,5 +92,15 @@ class E extends A {
     public E() {
         super();
         System.out.println("E()");
+    }
+
+    private String s;
+
+    public String getS() {
+        return s;
+    }
+
+    public void setS(String s) {
+        this.s = s;
     }
 }
