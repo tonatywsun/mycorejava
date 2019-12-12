@@ -14,8 +14,8 @@ import java.util.concurrent.TimeUnit;
  */
 public class ThreadPoolExecutorTest {
     private static final int COUNT_BITS = Integer.SIZE - 3;
-    //前三位状态位的值
-    private static final int RUNNING = -1 << COUNT_BITS;//111
+
+    private static final int RUNNING = -1 << COUNT_BITS;//111 前三位状态位的值
     private static final int SHUTDOWN = 0 << COUNT_BITS;//000
     private static final int STOP = 1 << COUNT_BITS;//001
     private static final int TIDYING = 2 << COUNT_BITS;//010
@@ -35,7 +35,7 @@ public class ThreadPoolExecutorTest {
       public void execute(Runnable command) {
         if (command == null)
             throw new NullPointerException();
-        // ctl初始数值为 （-1 << 29 |0）->11100000000000000000000000000000，其中前三位表示线程池状态，后29位数表示线程池中线程数量
+        // ctl初始数值为RUNNING状态 （-1 << 29 |0）->11100000000000000000000000000000，其中前三位表示线程池状态RUNNING，后29位数表示线程池中线程数量0
         int c = ctl.get();
         //workerCountOf(c),(-1 << 29 | 0) & ((1 << 29) - 1)取后29程池中线程数量
         if (workerCountOf(c) < corePoolSize) {

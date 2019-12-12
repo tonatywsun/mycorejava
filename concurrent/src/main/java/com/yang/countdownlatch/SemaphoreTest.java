@@ -34,12 +34,16 @@ public class SemaphoreTest {
 
 class MyThread implements Runnable {
     private static AtomicInteger atomicInteger = new AtomicInteger();
-    private static Semaphore s = new Semaphore(10);
+    private static Semaphore s = new Semaphore(0);//初始为0必须先release，不然只能允许同时0个通过，每 多（release多于acquire） release一次相当于permits+1
 
     @Override
     public void run() {
         try {
-            System.out.println("before---" + atomicInteger.incrementAndGet());
+            System.out.println("before---" + atomicInteger.get());
+            if (atomicInteger.incrementAndGet() == 5) {
+                s.release();//每多release一次相当于permits+1
+                s.release();
+            }
             //多余的暂停 最多有permits个线程同时在acquire和release之间运行
             s.acquire();
             System.out.println("save data");
