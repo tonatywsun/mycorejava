@@ -3,6 +3,8 @@ package com.yang.proxy.service.impl;
 import com.yang.proxy.service.OrderService;
 
 /**
+ * 需要被代理的对象
+ *
  * @author tona.sun
  * @date 2019/8/17 16:57
  */
