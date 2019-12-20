@@ -14,7 +14,7 @@ public class OrderServiceProxyP {
         this.orderService = orderService;
     }
 
-    public String order(String s) {
+    public String order(String s) throws Exception{
         System.out.println("staticproxy polymerization proxy!");
         return orderService.order(s);
     }

@@ -15,4 +15,9 @@ public class OrderServiceImpl implements OrderService {
         return s;
     }
 
+    @Override
+    public void getOrder() {
+        System.out.println("getOrder");
+    }
+
 }

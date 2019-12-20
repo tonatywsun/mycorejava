@@ -10,7 +10,7 @@ import com.yang.proxy.staticproxy.proxy.polymerization.OrderServiceProxyP;
  * @date 2019/8/17 16:55
  */
 public class Client {
-    public static void main(String[] args) {
+    public static void main (String[] args) throws Exception{
         OrderService proxy = new OrderServiceProxy();
         System.out.println("proxy1-" + proxy.order("main"));
 
