@@ -7,7 +7,9 @@ package com.yang.proxy.service;
  * @date 2019/8/17 16:55
  */
 public interface OrderService {
-    String order(String s) throws Exception;
+    String order(String s);
 
-    void getOrder() throws Exception;
+    void order(String s, Integer i);
+
+    void order();
 }

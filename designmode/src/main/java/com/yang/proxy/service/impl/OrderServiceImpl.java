@@ -11,13 +11,19 @@ import com.yang.proxy.service.OrderService;
 public class OrderServiceImpl implements OrderService {
     @Override
     public String order(String s) {
-        System.out.println("OrderServiceImpl order:" + s);
+        System.out.println("OrderServiceImpl order s");
         return s;
     }
 
     @Override
-    public void getOrder() {
-        System.out.println("getOrder");
+    public void order(String s, Integer i) {
+        System.out.println("OrderServiceImpl order String s, Integer i");
     }
+
+    @Override
+    public void order() {
+        System.out.println("OrderServiceImpl order");
+    }
+
 
 }

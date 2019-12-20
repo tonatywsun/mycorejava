@@ -1,6 +1,11 @@
 package com.yang.proxy.dynamicproxy;
 
 
+import com.yang.proxy.dynamicproxy.proxy.jdk.MyJdkInvocationHandler;
+import com.yang.proxy.dynamicproxy.proxy.jdk.util.MyProxyUtil;
+import com.yang.proxy.service.OrderService;
+import com.yang.proxy.service.impl.OrderServiceImpl;
+
 /**
  * @author tona.sun
  * @date 2019/8/17 16:55
@@ -15,10 +20,10 @@ public class Client {
         MyJdkInvocationHandler jdkInvocationHandler = new MyJdkInvocationHandler(tagert);
         OrderService proxy = (OrderService) Proxy.newProxyInstance(Client.class.getClassLoader(), tagert.getClass().getInterfaces(), jdkInvocationHandler);
         proxy.getOrder();*/
-        /*OrderServiceImpl tagert = new OrderServiceImpl();
+        OrderServiceImpl tagert = new OrderServiceImpl();
         MyJdkInvocationHandler jdkInvocationHandler = new MyJdkInvocationHandler(tagert);
-        OrderService proxy = (OrderService)MyProxyUtil.getProxy(tagert, jdkInvocationHandler);
-        proxy.getOrder();*/
+        OrderService proxy = (OrderService) MyProxyUtil.getProxy(tagert, jdkInvocationHandler);
+        proxy.order();
         /*Enhancer enhancer = new Enhancer();
         enhancer.setSuperclass(OrderServiceImpl.class);
         enhancer.setCallback(cglibMethodInterceptor);
