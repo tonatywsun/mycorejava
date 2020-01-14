@@ -28,7 +28,7 @@ public class MyJdkInvocationHandler implements InvocationHandler {
     //被代理方法其实执行的是这个方法
     @Override
     public Object invoke(Object proxy, Method method, Object[] args) {
-       // System.out.println("invoke proxy:" + proxy);
+        System.out.println("invoke proxy:" + proxy);
         /*Class<?> returnType = method.getReturnType();
         if ("void".equals(returnType.getName())) {
             return null;

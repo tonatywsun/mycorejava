@@ -1,10 +1,15 @@
 package com.yang.proxy.dynamicproxy;
 
 
-import com.yang.proxy.dynamicproxy.proxy.jdk.MyJdkInvocationHandler;
-import com.yang.proxy.dynamicproxy.proxy.jdk.util.MyProxyUtil;
-import com.yang.proxy.service.OrderService;
-import com.yang.proxy.service.impl.OrderServiceImpl;
+import com.yang.proxy.dynamicproxy.proxy.cglib.CglibMethodInterceptor;
+import com.yang.proxy.dynamicproxy.proxy.cglib.MyCallbackFilter;
+import com.yang.proxy.dynamicproxy.proxy.cglib.MyFixedValue;
+import com.yang.proxy.service.impl.OrderServiceDao;
+import net.sf.cglib.proxy.Callback;
+import net.sf.cglib.proxy.Dispatcher;
+import net.sf.cglib.proxy.Enhancer;
+import net.sf.cglib.proxy.LazyLoader;
+import net.sf.cglib.proxy.NoOp;
 
 /**
  * @author tona.sun
@@ -20,15 +25,53 @@ public class Client {
         MyJdkInvocationHandler jdkInvocationHandler = new MyJdkInvocationHandler(tagert);
         OrderService proxy = (OrderService) Proxy.newProxyInstance(Client.class.getClassLoader(), tagert.getClass().getInterfaces(), jdkInvocationHandler);
         proxy.order();*/
-        OrderServiceImpl tagert = new OrderServiceImpl();
+        /*OrderServiceImpl tagert = new OrderServiceImpl();
         MyJdkInvocationHandler jdkInvocationHandler = new MyJdkInvocationHandler(tagert);
         OrderService proxy = (OrderService) MyProxyUtil.getProxy(tagert.getClass().getClassLoader(),tagert.getClass().getInterfaces(), jdkInvocationHandler);
-        proxy.order("ss");
-        /*Enhancer enhancer = new Enhancer();
-        enhancer.setSuperclass(OrderServiceImpl.class);
-        enhancer.setCallback(new CglibMethodInterceptor());
-        OrderServiceImpl orderService = (OrderServiceImpl)enhancer.create();
+        proxy.order("ss");*/
+        Enhancer enhancer = new Enhancer();
+        enhancer.setSuperclass(OrderServiceDao.class);
+        Callback noopCb = NoOp.INSTANCE;
+        CglibMethodInterceptor cglibMethodInterceptor = new CglibMethodInterceptor();
+        MyFixedValue myFixedValue = new MyFixedValue();
+        enhancer.setCallbacks(new Callback[]{noopCb, cglibMethodInterceptor, myFixedValue});
+        /*
+            过滤出对应的Callback,逻辑自己写
+         */
+        enhancer.setCallbackFilter(new MyCallbackFilter());
+        OrderServiceDao orderService = (OrderServiceDao) enhancer.create();
+        /**
+         * 对需要延迟加载的对象添加代理，在获取该对象属性时先通过代理类回调方法进行对象初始化。
+         * 在不需要加载该对象时，只要不去获取该对象内属性，该对象就不会被初始化了（在CGLib的实现中只要去访问该对象内属性的getter方法，
+         * 就会自动触发代理类回调）。
+         */
+        /*
+            只有第一次懒加载
+         */
+        OrderServiceDao orderService2 = (OrderServiceDao) Enhancer.create(OrderServiceDao.class, (LazyLoader) () -> {
+            System.out.println("before lazyLoader...");
+            OrderServiceDao propertyBean = new OrderServiceDao();
+            System.out.println("after lazyLoader...");
+            return propertyBean;
+        });
+        /*
+            每次都懒加载
+         */
+        OrderServiceDao orderService3 = (OrderServiceDao) Enhancer.create(OrderServiceDao.class, (Dispatcher) () -> {
+            System.out.println("before Dispatcher...");
+            OrderServiceDao propertyBean = new OrderServiceDao();
+            System.out.println("after Dispatcher...");
+            return propertyBean;
+        });
         //System.out.println(orderService);
-        orderService.order("cglib main");*/
+        System.out.println(orderService.method1());
+        System.out.println(orderService.method2());
+        System.out.println(orderService.method3());
+        System.out.println(orderService2.method1());
+        System.out.println(orderService2.method2());
+        System.out.println(orderService2.method3());
+        System.out.println(orderService3.method1());
+        System.out.println(orderService3.method2());
+        System.out.println(orderService3.method3());
     }
 }
