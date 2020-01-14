@@ -16,37 +16,42 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * @description : 手写动态代理生成类
+ * Java动态代理只能够对接口进行代理，不能对普通的类进行代理（因为所有生成的代理类的父类为Proxy，Java类继承机制不允许多重继承）
+ * Java动态代理使用Java原生的反射API进行操作，在生成类上比较高效
  * @date : 2019/12/20 16:23
  */
 public class MyProxyUtil {
     public static final String line = "\n";
     public static final String tab = "\t";
-    public static AtomicInteger atomicInteger = new AtomicInteger();
+    public static AtomicInteger atomicInteger = new AtomicInteger(100);
 
     //手写的动态代理生成代理类方法
-    public static Object getProxy(Object target, InvocationHandler handler) throws Exception {
+    public static Object getProxy(ClassLoader loader,
+                                  Class<?>[] interfaces,
+                                  InvocationHandler handler) throws Exception {
         Object proxy = null;
-        Class<?> targetClass = target.getClass();
+        //Class<?> targetClass = target.getClass();
         //目标类的全限定名
-        String targetName = targetClass.getName();
+        //String targetName = targetClass.getName();
         //目标类的包名
-        String targetackageName = targetName.substring(0, targetName.lastIndexOf("."));
+        String targetackageName = "com.sun.proxy";
+        //String targetackageName = targetName.substring(0, targetName.lastIndexOf("."));
         //目标类实现的接口们
-        Class[] targetInterfaces = targetClass.getInterfaces();
+        //Class[] targetInterfaces = targetClass.getInterfaces();
         String classContent = "";
         //和目标类同一个包，避免引得的非public的包无权限访问
         String packageContent = "package " + targetackageName + ";" + line;
         //导入InvocationHandler包，因为要用到导入InvocationHandler包
         String importContent = "import java.lang.reflect.InvocationHandler;" + line;
         //导入所有接口包
-        for (Class targetInterface : targetInterfaces) {
+        for (Class targetInterface : interfaces) {
             importContent += "import " + targetInterface.getName() + ";" + line;
         }
         //定义动态代理类类名$Proxy0123456789
         int index = atomicInteger.incrementAndGet();
         String clazzFirstLineContent = "public class $Proxy" + index + " implements ";
         //实现目标类的所有接口
-        for (Class targetInterface : targetInterfaces) {
+        for (Class targetInterface : interfaces) {
             clazzFirstLineContent += targetInterface.getSimpleName();
         }
         clazzFirstLineContent += "{" + line;
@@ -56,7 +61,7 @@ public class MyProxyUtil {
         String constructorContent = tab + "public $Proxy" + index + " (InvocationHandler handler){ this.handler = handler; }" + line;
         String methodContent = "";
         //遍历所有接口
-        for (Class targetInterface : targetInterfaces) {
+        for (Class targetInterface : interfaces) {
             Method[] methods = targetInterface.getDeclaredMethods();
             //实现所有接口的方法
             for (Method method : methods) {
@@ -99,25 +104,25 @@ public class MyProxyUtil {
                 if ("void".equals(returnTypeName)) {
                     if (oldArgsContent == null) {
                         methodContent += tab + "public " + returnTypeName + " " + methodName + "(" + argsContent + ") {try{" + line
-                                + tab + tab + "handler.invoke(this,Class.forName(\"" + targetClass.getName() + "\").getMethod(\"" + methodName + "\", " + paramsContent + ")," + paramsContent + ");" + line
-                                + tab + "}catch (Throwable var3) {}" +
+                                + tab + tab + "handler.invoke(this,Class.forName(\"" + targetInterface.getName() + "\").getMethod(\"" + methodName + "\", " + paramsContent + ")," + paramsContent + ");" + line
+                                + tab + "}catch (Throwable var3) {  var3.printStackTrace(); }" +
                                 "}" + line;
                     } else {
                         methodContent += tab + "public " + returnTypeName + " " + methodName + "(" + argsContent + ")  {try{" + line
-                                + tab + tab + "handler.invoke(this,Class.forName(\"" + targetClass.getName() + "\").getMethod(\"" + methodName + "\", " + argsClassContent + "),new Object[]{" + paramsContent + "});" + line
-                                + tab + "}catch (Throwable var3) {} " + line
+                                + tab + tab + "handler.invoke(this,Class.forName(\"" + targetInterface.getName() + "\").getMethod(\"" + methodName + "\", " + argsClassContent + "),new Object[]{" + paramsContent + "});" + line
+                                + tab + "}catch (Throwable var3) {  var3.printStackTrace(); } " + line
                                 + tab + "}" + line;
                     }
                 } else {
                     if (oldArgsContent == null) {
                         methodContent += tab + "public " + returnTypeName + " " + methodName + "(" + argsContent + ") {try{" + line
-                                + tab + tab + "return  ( " + returnTypeName + ") handler.invoke(this,Class.forName(\"" + targetClass.getName() + "\").getMethod(\"" + methodName + "\", " + paramsContent + ")," + paramsContent + ");" + line
-                                + tab + "}catch (Throwable var3) {}"
+                                + tab + tab + "return  ( " + returnTypeName + ") handler.invoke(this,Class.forName(\"" + targetInterface.getName() + "\").getMethod(\"" + methodName + "\", " + paramsContent + ")," + paramsContent + ");" + line
+                                + tab + "}catch (Throwable var3) { var3.printStackTrace(); }"
                                 + tab + "return null;}" + line;
                     } else {
                         methodContent += tab + "public " + returnTypeName + " " + methodName + "(" + argsContent + ")  {try{" + line
-                                + tab + tab + "return  (" + returnTypeName + ")handler.invoke(this,Class.forName(\"" + targetClass.getName() + "\").getMethod(\"" + methodName + "\", " + argsClassContent + "),new Object[]{" + paramsContent + "});" + line
-                                + tab + "}catch (Throwable var3) {} " + line
+                                + tab + tab + "return  (" + returnTypeName + ")handler.invoke(this,Class.forName(\"" + targetInterface.getName() + "\").getMethod(\"" + methodName + "\", " + argsClassContent + "),new Object[]{" + paramsContent + "});" + line
+                                + tab + "}catch (Throwable var3) { var3.printStackTrace(); } " + line
                                 + tab + "return null;}" + line;
                     }
                 }
