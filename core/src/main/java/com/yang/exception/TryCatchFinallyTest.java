@@ -124,7 +124,7 @@ public class TryCatchFinallyTest {
 
     @Test
     public void test3() {
-        int limit = Integer.MAX_VALUE >>> 2;
+        int limit = Integer.MAX_VALUE >>> 1;
         int k = 0;
         long currentTimeMillis = System.currentTimeMillis();
         for (int i = 1; i < limit; i++) {

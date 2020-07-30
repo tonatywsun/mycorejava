@@ -17,7 +17,7 @@ public class ConcurrentHashMapTest {
         private final Node<K,V>[] initTable() {
             Node<K,V>[] tab; int sc;
             while ((tab = table) == null || tab.length == 0) {
-                if ((sc = sizeCtl) < 0)//如果其他线程已经把sizeCtl置为-1，则此处当前现场会让出执行权
+                if ((sc = sizeCtl) < 0)//如果其他线程已经把sizeCtl置为-1，则此处当前线程会让出执行权
                     Thread.yield(); // lost initialization race; just spin
                 else if (U.compareAndSetInt(this, SIZECTL, sc, -1)) { //用cas方式比较sizeCtl是否为0，为零则置为-1，表示在初始化，保证线程安全
                     try {

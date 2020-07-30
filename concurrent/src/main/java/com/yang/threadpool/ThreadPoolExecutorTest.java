@@ -104,7 +104,6 @@ public class ThreadPoolExecutorTest {
         threadPoolExecutor.execute(new MyRunnable("12"));
         threadPoolExecutor.execute(new MyRunnable("13"));
 
-
         Thread.sleep(5000);
 
         //关闭线程池，不再接受新任务，但要等队列里面的执行完毕之后才会真正关闭

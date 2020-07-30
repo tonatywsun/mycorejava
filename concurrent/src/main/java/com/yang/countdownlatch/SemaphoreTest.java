@@ -41,6 +41,7 @@ class MyThread implements Runnable {
         try {
             System.out.println("before---" + atomicInteger.get());
             if (atomicInteger.incrementAndGet() == 5) {
+                System.out.println("开始release");
                 s.release();//每多release一次相当于permits+1
                 s.release();
             }

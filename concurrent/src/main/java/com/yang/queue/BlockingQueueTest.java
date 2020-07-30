@@ -28,7 +28,7 @@ public class BlockingQueueTest {
         }
         //如果满了还add会抛出异常
         //abq.add("5");
-        //如果慢了不会等待直接返回false
+        //如果满了不会等待直接返回false
         System.out.println(abq.offer("6"));
     }
 

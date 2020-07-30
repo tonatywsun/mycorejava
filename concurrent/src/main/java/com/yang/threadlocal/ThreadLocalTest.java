@@ -18,9 +18,9 @@ public class ThreadLocalTest {
         Thread t1 = new Thread(() -> {
             //tl.get()中获取的是当前线程的ThreadLocal.ThreadLocalMap threadLocals map中有一个private Entry[] table
             for (int i = 0; i < 10; i++) {
-                System.gc();
+                //System.gc();
                 if (tl.get() == null) {
-                    System.out.println("set");
+                    System.out.println("t1 set");
                     tl.set(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"));
                 }
                 try {
@@ -37,6 +37,7 @@ public class ThreadLocalTest {
         Thread t2 = new Thread(() -> {
             for (int i = 0; i < 10; i++) {
                 if (tl.get() == null) {
+                    System.out.println("t2 set");
                     tl.set(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"));
                 }
                 System.out.println("2---" + tl.get());
