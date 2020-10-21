@@ -14,7 +14,8 @@ public class WeakReferenceTest {
             // 使用弱引用后,原本由于堆内存溢出而无法正常执行的代码段“正常的”执行成功
             values[i] = new WeakReference<BiggerObject>(new BiggerObject("Object-" + i));
         }
-        // 当堆内存足够时，强制进行垃圾回收，对象会被回收
+        //不gc的时候部分超过的会被回收
+        // 当堆内存足够时，强制进行垃圾回收，对象全部会被回收
         System.gc();
         for (int i = count - 1; i > 0; i--) {
             // 一个对象都没有
