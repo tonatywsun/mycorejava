@@ -14,7 +14,8 @@
 		<module>jdk1_8</module>
 		<module>other</module>
 		<module>test</module>
-	</modules>
+        <module>jdk1_9</module>
+    </modules>
 	<!-- 项目属性 -->
 	<properties>
 		<!-- jar 版本设置 -->
